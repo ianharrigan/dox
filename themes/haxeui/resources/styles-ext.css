@@ -1,0 +1,56 @@
+.nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
+    background-color: #08c;
+    border-radius: 5px;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.nav-list li i.fa {
+    font-size: 14px;
+    vertical-align: middle;
+    __color: #08c;
+}
+
+.package-haxe {
+    padding-right: 9px;
+}
+
+#searchForm {
+    margin-bottom: 0;
+}
+
+.field {
+    padding-bottom: 0;
+}
+
+.field > h3 {
+    margin-top: 0;
+    margin-left: 10px;
+}
+
+.fields {
+    margin-left: 20px;
+}
+
+div.doc {
+    font-size: 14px;
+}
+
+h3 span.label {
+    margin-right: 2px;
+}
+
+.meta-style {
+    background-color: rebeccapurple;
+}
+
+.meta-clonable {
+    background-color: darkseagreen;
+}
+
+.meta-bindable {
+    background-color: darkgoldenrod;   
+}

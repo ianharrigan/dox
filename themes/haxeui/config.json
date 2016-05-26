@@ -1,0 +1,9 @@
+{
+  "name": "HaxeUI Theme",
+  "author": "Ian Harrigan",
+  "parentTheme": "default",
+  "defines": {
+    "collapsedClass": "fa-arrow-circle-right",
+    "expandedClass": "fa-arrow-circle-down" 
+  }
+}

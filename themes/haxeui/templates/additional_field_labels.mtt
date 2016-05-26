@@ -1,0 +1,11 @@
+::if field.meta != null::
+::foreach meta field.meta::
+::set metaName = meta.name::
+::if metaName.indexOf(":") == 0::
+::set metaName = metaName.substring(1, metaName.length)::
+::end::
+::if metaName != "allow" && metaName != "impl"::
+<span class="label meta-::metaName::">::metaName::</span>
+::end::
+::end::
+::end::
