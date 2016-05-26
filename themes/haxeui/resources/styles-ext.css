@@ -54,3 +54,24 @@ h3 span.label {
 .meta-bindable {
     background-color: darkgoldenrod;   
 }
+
+.section {
+    margin-top: 30px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+    overflow: visible;
+}
+
+.main-content {
+    margin-top: 35px;
+}
+
+.nav-list {
+    padding-right: 8px;
+}
+
+.inherited-fields {
+    margin-top: 2em;
+}

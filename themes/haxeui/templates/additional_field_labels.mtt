@@ -4,7 +4,7 @@
 ::if metaName.indexOf(":") == 0::
 ::set metaName = metaName.substring(1, metaName.length)::
 ::end::
-::if metaName != "allow" && metaName != "impl"::
+::if metaName != "allow" && metaName != "impl" && metaName != "dox"::
 <span class="label meta-::metaName::">::metaName::</span>
 ::end::
 ::end::

@@ -132,94 +132,18 @@
 </macro>
 
 <macro name="printClassBody(type)">
-	::set showSection = false::
-	::foreach field type.fields::
-		::if field.name == "new" && api.isMethod(field)::
-			::eval showSection = true::
+	::set groups = api.buildGroupsForType(type)::
+	::foreach group groups::
+		::set fields = group.fields::
+		::if fields.length > 0::
+			<h3 class="section">::group.name::</h3>
+			<div class="fields">
+			::foreach field group.fields::
+				::set isStatic = api.isStatic(type, field)::
+				::use "class_field.mtt"::::end::
+			::end::	
+			</div>
 		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Constructor</h3>
-		<div class="fields">
-			::foreach field type.fields::
-				::set isStatic = false::
-				::if field.name == "new" && api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.fields::
-		::if !api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Variables</h3>
-		<div class="fields">
-			::foreach field type.fields::
-				::set isStatic = false::
-				::if !api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.fields::
-		::if field.name != "new" && api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Methods</h3>
-		<div class="fields">
-			::foreach field type.fields::
-				::set isStatic = false::
-				::if field.name != "new" && api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.statics::
-		::if !api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Static variables</h3>
-		<div class="fields">
-			::foreach field type.statics::
-				::set isStatic = true::
-				::if !api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.statics::
-		::if api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Static methods</h3>
-		<div class="fields">
-			::foreach field type.statics::
-				::set isStatic = true::
-				::if api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
 	::end::
 </macro>
 

@@ -423,6 +423,118 @@ class Api {
 	private function sanitizePath(path:String) {
 		return ~/Index$/.replace(path, "$Index");
 	}
+	
+	public function buildGroupsForType(type) {
+		var groups:Map<String, Array<Dynamic>> = new Map<String, Array<Dynamic>>();
+		var fields:List<Dynamic> = type.fields;
+		for (field in fields.iterator()) {
+			
+			
+			var hasGroup = false;
+			// TODO: clean up
+			var t:Array<Dynamic> = field.meta;
+			for (m in t) {
+				if (m.name == ":dox" && m.params != null && m.params.length > 0) {
+					var p = "" + m.params[0];
+					if (p.indexOf("group") != -1) {
+						var a:Array<Dynamic> = p.split("=");
+						var groupName:String = StringTools.replace(a[1], "\"", "");
+						hasGroup = true;
+						addToGroup(groups, groupName, field);
+						break;
+					}
+				}
+			}
+			
+			if (hasGroup == false) {
+				if (field.name == "new") {
+					//var params:List<Dynamic> = field.params;
+					//if (field.params.length > 0) {
+//						addToGroup(groups, "Constructor", field);
+					//}
+				} else if (!isMethod(field)) {
+					addToGroup(groups, "Properties", field);
+				} else if (isMethod(field) && !field.isOverride) {
+					addToGroup(groups, "Methods", field);
+				}
+			}
+		}
+		
+		var statics:List<Dynamic> = type.statics;
+		for (field in statics.iterator()) {
+			var t:Array<Dynamic> = field.meta;
+			
+			var hasGroup = false;
+			// TODO: clean up
+			for (m in t) {
+				if (m.name == ":dox" && m.params != null && m.params.length > 0) {
+					var p = m.params[0];
+					if (p.indexOf("group") != -1) {
+						var a:Array<Dynamic> = p.split("=");
+						var groupName:String = StringTools.replace(a[1], "\"", "");
+						hasGroup = true;
+						addToGroup(groups, groupName, field);
+						break;
+					}
+				}
+			}
+			
+			if (hasGroup == false) {
+				if (!isMethod(field)) {
+					addToGroup(groups, "Static Properties", field);
+				} else {
+					addToGroup(groups, "Static Methods", field);
+				}
+			}
+		}
+		
+		var sortedGroups:Array<Dynamic> = new Array<Dynamic>();
+		if (groups.exists("Constructor")) {
+			sortedGroups.push({name: "Constructor", fields: groups.get("Constructor")});
+		}
+		if (groups.exists("Properties")) {
+			sortedGroups.push({name: "Properties", fields: groups.get("Properties")});
+		}
+		if (groups.exists("Methods") && groups.get("Methods").length > 0) {
+			sortedGroups.push({name: "Methods", fields: groups.get("Methods")});
+		}
+		if (groups.exists("Static Properties")) {
+			sortedGroups.push({name: "Static Properties", fields: groups.get("Static Properties")});
+		}
+		if (groups.exists("Static Methods")) {
+			sortedGroups.push({name: "Static Methods", fields: groups.get("Static Methods")});
+		}
+		
+		for (groupName in groups.keys()) {
+			if (groupName != "Constructor" && groupName != "Properties" && groupName != "Methods" && groupName != "Static Properties"  && groupName != "Static Methods") {
+				sortedGroups.push({name: groupName, fields: groups.get(groupName)});
+			}
+		}
+		
+		return sortedGroups;
+	}
+	
+	public function isStatic(type, field):Bool {
+		if (type.statics == null) {
+			return false;
+		}
+		var statics:List<Dynamic> = type.statics;
+		for (staticField in statics.iterator()) {
+			if (staticField.name == field.name) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private function addToGroup(groups:Map<String, Array<Dynamic>>, groupName:String, item:Dynamic) {
+		var array:Array<Dynamic> = groups.get(groupName);
+		if (array == null) {
+			array = new Array<Dynamic>();
+			groups.set(groupName, array);
+		}
+		array.push(item);
+	}
 }
 
 /**
